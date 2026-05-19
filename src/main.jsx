@@ -101,7 +101,7 @@ function Root() {
     )
   }
   if (!unlocked) return <PinLock onUnlock={() => setUnlocked(true)}/>
-  return <App/>
+  return <ErrorBoundary><App/></ErrorBoundary>
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
