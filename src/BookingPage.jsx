@@ -290,10 +290,10 @@ export default function BookingPage() {
     })
   },[retForm.date, newForm.date])
 
-  const handleLookup = async () => {
-    if(!lookupValue.trim()) return
+  const handleLookup = async (overrideVal) => {
+    const v = (overrideVal || lookupValue).trim()
+    if(!v) return
     setLooking(true)
-    const v = lookupValue.trim()
     const isEmail = v.includes('@')
     const { data } = isEmail
       ? await supabase.from('clients').select('*').ilike('email', v).limit(1)
@@ -514,7 +514,7 @@ export default function BookingPage() {
                     </div>
                   )}
 
-                  <GradBtn C={C} onClick={()=>{ setLookupValue(fullValue); handleLookup() }} disabled={lookupMode==='phone'?!phoneNum.trim():!lookupValue.trim()||looking}>
+                  <GradBtn C={C} onClick={()=>{ const v = lookupMode==='phone' ? countryCode+phoneNum : lookupValue; setLookupValue(v); handleLookup(v) }} disabled={lookupMode==='phone'?!phoneNum.trim():!lookupValue.trim()||looking}>
                     {looking?'Checking...':'Continue →'}
                   </GradBtn>
             </Card>
