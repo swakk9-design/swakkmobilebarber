@@ -577,18 +577,18 @@ export default function BookingPage() {
                 <Field C={C} label="Phone Number" hint="Used to find your profile next time">
                   <Inp C={C} value={newForm.phone} onChange={e=>nf({phone:e.target.value})} placeholder="+971 50 000 0000" type="tel"/>
                 </Field>
-                <Field C={C} label="Area" hint="e.g. JVC, Arabian Ranches, Jumeirah">
-                  <Inp C={C} value={newForm.area} onChange={e=>nf({area:e.target.value})} placeholder="JVC"/>
+                <Field C={C} label="Area">
+                  <Inp C={C} value={newForm.area} onChange={e=>nf({area:e.target.value})} placeholder="Area"/>
                 </Field>
-                <Field C={C} label="Building / Street" hint="e.g. Hanover Square, Street 2, Villa Road">
-                  <Inp C={C} value={newForm.building} onChange={e=>nf({building:e.target.value})} placeholder="e.g. Hanover Square, Al Wasl Road"/>
+                <Field C={C} label="Building / Street">
+                  <Inp C={C} value={newForm.building} onChange={e=>nf({building:e.target.value})} placeholder="Building or street name"/>
                 </Field>
                 <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
                   <Field C={C} label="Apt / Villa No.">
-                    <Inp C={C} value={newForm.unitNo} onChange={e=>nf({unitNo:e.target.value})} placeholder="e.g. G08, Villa 7"/>
+                    <Inp C={C} value={newForm.unitNo} onChange={e=>nf({unitNo:e.target.value})} placeholder="Apt / Villa no."/>
                   </Field>
                   <Field C={C} label="Tower / Gate / Block (optional)">
-                    <Inp C={C} value={newForm.block} onChange={e=>nf({block:e.target.value})} placeholder="e.g. Block C, Tower 2, Gate 4"/>
+                    <Inp C={C} value={newForm.block} onChange={e=>nf({block:e.target.value})} placeholder="Block / Tower / Gate"/>
                   </Field>
                 </div>
                 <Check C={C} checked={newForm.sameWhatsapp} onChange={()=>nf({sameWhatsapp:!newForm.sameWhatsapp})} label="WhatsApp same as phone number"/>
