@@ -328,7 +328,7 @@ export default function BookingPage() {
       try {
         await fetch('https://nnidxufnykutfpszfjja.supabase.co/functions/v1/notify-booking', {
           method:'POST',
-          headers:{'Content-Type':'application/json'},
+          headers:{'Content-Type':'application/json','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5uaWR4dWZueWt1dGZwc3pmamphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NzE0MTksImV4cCI6MjA5NDI0NzQxOX0.sxZOApxZOXSey3iz_ZTjZh9Qnz6_aNxHs7_YZY7b7wM'},
           body:JSON.stringify({ type:'new_booking', booking:{ clientName:fullName, service:svc?.label, date:f.date, time:f.time, price:svc?.price, location:fullAddress, bookingRef:ref, clientPhone:f.phone } })
         })
       } catch(e) { console.log('notify failed', e) }
@@ -349,7 +349,7 @@ export default function BookingPage() {
       try {
         await fetch('https://nnidxufnykutfpszfjja.supabase.co/functions/v1/notify-booking', {
           method:'POST',
-          headers:{'Content-Type':'application/json'},
+          headers:{'Content-Type':'application/json','Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5uaWR4dWZueWt1dGZwc3pmamphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NzE0MTksImV4cCI6MjA5NDI0NzQxOX0.sxZOApxZOXSey3iz_ZTjZh9Qnz6_aNxHs7_YZY7b7wM'},
           body:JSON.stringify({ type:'new_booking', booking:{ clientName:c.name, service:svc?.label, date:f.date, time:f.time, price:svc?.price, location:'', bookingRef:ref, clientPhone:c.phone||null } })
         })
       } catch(e) { console.log('notify failed', e) }
