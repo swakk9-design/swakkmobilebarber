@@ -264,7 +264,7 @@ export default function BookingPage() {
   const [phoneNum, setPhoneNum] = useState('')
   const [showCodes, setShowCodes] = useState(false)
 
-  const blankNew = () => ({ name:'', address:'', phone:'', sameWhatsapp:true, whatsapp:'', email:'', service:'', date:'', time:'', notes:'', mediaConsent:false, groupMembers:[] })
+  const blankNew = (phone='') => ({ firstName:'', lastName:'', address:'', phone:phone, sameWhatsapp:true, whatsapp:'', email:'', service:'', date:'', time:'', notes:'', mediaConsent:false, groupMembers:[] })
   const blankRet = () => ({ service:'', date:'', time:'', notes:'', groupMembers:[] })
   const [newForm, setNewForm] = useState(blankNew())
   const [retForm, setRetForm] = useState(blankRet())
@@ -299,7 +299,7 @@ export default function BookingPage() {
       ? await supabase.from('clients').select('*').ilike('email', v).limit(1)
       : await supabase.from('clients').select('*').ilike('phone', `%${v.replace(/\s/g,'')}%`).limit(1)
     if(data?.length) { setExistingClient(data[0]); setScreen('returning') }
-    else setScreen('new_client')
+    else { setNewForm(blankNew(v)); setScreen('new_client') }
     setLooking(false)
   }
 
@@ -312,7 +312,7 @@ export default function BookingPage() {
 
   const submitNew = async () => {
     const f = newForm
-    if(!f.name||!f.service||!f.date||!f.time) return
+    if(!f.firstName||!f.lastName||!f.service||!f.date||!f.time||!f.email) return
     setSubmitting(true)
     const ref = Math.random().toString(36).substring(2,8).toUpperCase()
     const svc = SERVICES.find(s=>s.id===f.service)
@@ -321,13 +321,13 @@ export default function BookingPage() {
     if(!ex.data?.length) await supabase.from('clients').insert({name:f.name,phone:f.phone,email:f.email||null,preferred_service:svc?.label,notes:f.mediaConsent?'Media consent: yes':'Media consent: no',since:new Date().toISOString().slice(0,10)})
     const {error}=await supabase.from('bookings').insert({client_name:f.name,service:svc?.label,date:f.date,time:f.time,notes:buildNotes(f.notes,f.groupMembers),status:'confirmed',booking_ref:ref,location:f.address,price:String(svc?.price||'')})
     if(!error){
-      setConfirmed({name:f.name,service:svc?.label,price:svc?.price,date:f.date,time:f.time,bookingRef:ref,isNew:true})
+      setConfirmed({name:fullName,service:svc?.label,price:svc?.price,date:f.date,time:f.time,bookingRef:ref,isNew:true})
       setScreen('confirm')
       try {
         await fetch('https://nnidxufnykutfpszfjja.supabase.co/functions/v1/notify-booking', {
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({ type:'new_booking', booking:{ clientName:f.name, service:svc?.label, date:f.date, time:f.time, price:svc?.price, location:f.address, bookingRef:ref, clientPhone:f.phone } })
+          body:JSON.stringify({ type:'new_booking', booking:{ clientName:fullName, service:svc?.label, date:f.date, time:f.time, price:svc?.price, location:f.address, bookingRef:ref, clientPhone:f.phone } })
         })
       } catch(e) { console.log('notify failed', e) }
     }
@@ -570,7 +570,10 @@ export default function BookingPage() {
               )}
               <Card C={C}>
                 <SectionLabel C={C}>Your Details</SectionLabel>
-                <Field C={C} label="Full Name"><Inp C={C} value={newForm.name} onChange={e=>nf({name:e.target.value})} placeholder="e.g. Ahmed Al Mansoori"/></Field>
+                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginBottom:20 }}>
+                  <Field C={C} label="First Name"><Inp C={C} value={newForm.firstName} onChange={e=>nf({firstName:e.target.value})} placeholder="Ahmed"/></Field>
+                  <Field C={C} label="Last Name"><Inp C={C} value={newForm.lastName} onChange={e=>nf({lastName:e.target.value})} placeholder="Al Mansoori"/></Field>
+                </div>
                 <Field C={C} label="Phone Number" hint="Used to find your profile next time">
                   <Inp C={C} value={newForm.phone} onChange={e=>nf({phone:e.target.value})} placeholder="+971 50 000 0000" type="tel"/>
                 </Field>
@@ -579,7 +582,7 @@ export default function BookingPage() {
                 </Field>
                 <Check C={C} checked={newForm.sameWhatsapp} onChange={()=>nf({sameWhatsapp:!newForm.sameWhatsapp})} label="WhatsApp same as phone number"/>
                 {!newForm.sameWhatsapp && <Field C={C} label="WhatsApp Number"><Inp C={C} value={newForm.whatsapp} onChange={e=>nf({whatsapp:e.target.value})} placeholder="+971 50 000 0000" type="tel"/></Field>}
-                <Field C={C} label="Email (optional)"><Inp C={C} value={newForm.email} onChange={e=>nf({email:e.target.value})} placeholder="you@email.com" type="email"/></Field>
+                <Field C={C} label="Email"><Inp C={C} value={newForm.email} onChange={e=>nf({email:e.target.value})} placeholder="you@email.com" type="email"/></Field>
                 <Check C={C} checked={newForm.mediaConsent} onChange={()=>nf({mediaConsent:!newForm.mediaConsent})} label="I'm happy for photos/videos to be used for social media" sub="Optional — no worries if not"/>
               </Card>
               <ServicePicker C={C} service={newForm.service} onService={v=>nf({service:v})} date={newForm.date} onDate={v=>nf({date:v})} time={newForm.time} onTime={v=>nf({time:v})} bookedSlots={bookedSlots} groupMembers={newForm.groupMembers} onMemberUpdate={(i,f,v)=>updateMember(true,i,f,v)}/>
@@ -589,7 +592,7 @@ export default function BookingPage() {
                     style={{ width:'100%', background:C.bg2, border:`1.5px solid ${C.border}`, borderRadius:12, padding:'14px 16px', fontSize:15, color:C.text, outline:'none', boxSizing:'border-box', resize:'vertical', minHeight:70 }}/>
                 </Field>
               </Card>
-              <GradBtn C={C} onClick={submitNew} disabled={submitting||!newForm.name||!newForm.phone||!newForm.address||!newForm.service||!newForm.date||!newForm.time}>
+              <GradBtn C={C} onClick={submitNew} disabled={submitting||!newForm.firstName||!newForm.lastName||!newForm.phone||!newForm.address||!newForm.email||!newForm.service||!newForm.date||!newForm.time}>
                 {submitting?'Booking...':'Confirm Booking →'}
               </GradBtn>
               <div style={{ marginTop:10 }}><OutlineBtn C={C} onClick={reset}>← Back</OutlineBtn></div>
