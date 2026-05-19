@@ -27,7 +27,7 @@ const THEMES = {
   'Football':          { emoji:'⚽', bg:'#f0fff4', bg2:'#e0f8e8', border:'#a8e0b8', text:'#0a2010', muted:'#3a7050', accent:'#15803d', accentLight:'rgba(21,128,61,0.1)', grad:'linear-gradient(135deg,#15803d,#166534)', green:'#15803d', red:'#dc2626' },
   'Touch Rugby':       { emoji:'🏉', bg:'#fffbf0', bg2:'#fff3d0', border:'#e8d890', text:'#201000', muted:'#806020', accent:'#b45309', accentLight:'rgba(180,83,9,0.1)', grad:'linear-gradient(135deg,#b45309,#78350f)', green:'#15803d', red:'#dc2626' },
   'Basketball':        { emoji:'🏀', bg:'#fff8f0', bg2:'#ffe8d0', border:'#f0c8a0', text:'#200800', muted:'#904020', accent:'#ea580c', accentLight:'rgba(234,88,12,0.1)', grad:'linear-gradient(135deg,#ea580c,#c2410c)', green:'#15803d', red:'#dc2626' },
-  'Golf':              { emoji:'⛳', bg:'#f5fbf0', bg2:'#e4f4d8', border:'#b8d8a0', text:'#102008', muted:'#507040', accent:'#4d7c0f', accentLight:'rgba(77,124,15,0.1)', grad:'linear-gradient(135deg,#4d7c0f,#3f6212)', green:'#4d7c0f', red:'#dc2626' },
+  'Golf':              { emoji:'🏌️', bg:'#f5fbf0', bg2:'#e4f4d8', border:'#b8d8a0', text:'#102008', muted:'#507040', accent:'#4d7c0f', accentLight:'rgba(77,124,15,0.1)', grad:'linear-gradient(135deg,#4d7c0f,#3f6212)', green:'#4d7c0f', red:'#dc2626' },
   'Swimming':          { emoji:'🏊', bg:'#f0fbff', bg2:'#d8f0fc', border:'#90d0f0', text:'#001828', muted:'#307898', accent:'#0284c7', accentLight:'rgba(2,132,199,0.1)', grad:'linear-gradient(135deg,#0284c7,#075985)', green:'#15803d', red:'#dc2626' },
   'Boxing':            { emoji:'🥊', bg:'#0a0000', bg2:'#140000', border:'#280000', text:'#ffd0d0', muted:'#a04040', accent:'#dc2626', accentLight:'rgba(220,38,38,0.12)', grad:'linear-gradient(135deg,#dc2626,#991b1b)', green:'#22c55e', red:'#dc2626' },
   'Tennis':            { emoji:'🎾', bg:'#fdf8f0', bg2:'#f8ecd8', border:'#e8d098', text:'#201000', muted:'#806030', accent:'#b45309', accentLight:'rgba(180,83,9,0.1)', grad:'linear-gradient(135deg,#b45309,#92400e)', green:'#15803d', red:'#dc2626' },
@@ -241,11 +241,11 @@ const ThemePicker = ({ C, current, onSelect, onClose }) => (
 
 // ─── MAIN BOOKING PAGE ────────────────────────────────────────────────────────
 export default function BookingPage() {
-  const [themeName, setThemeName] = useState(()=>localStorage.getItem(THEME_KEY)||DEFAULT_THEME)
+  const [themeName, setThemeName] = useState(()=>{ try { return localStorage.getItem(THEME_KEY)||DEFAULT_THEME } catch(e) { return DEFAULT_THEME } })
   const [themeOpen, setThemeOpen] = useState(false)
-  const C = THEMES[themeName]||THEMES[DEFAULT_THEME]
+  const C = THEMES[themeName] || THEMES[DEFAULT_THEME] || Object.values(THEMES)[0]
 
-  const applyTheme = (name) => { setThemeName(name); localStorage.setItem(THEME_KEY, name) }
+  const applyTheme = (name) => { setThemeName(name); try { localStorage.setItem(THEME_KEY, name) } catch(e) {} }
 
   const [screen, setScreen] = useState('landing')
   const [showFirstTime, setShowFirstTime] = useState(true)
@@ -371,6 +371,7 @@ export default function BookingPage() {
     setCancelDone(true)
   }
 
+  if (!C) return <div style={{padding:40,textAlign:'center'}}>Loading...</div>
   return (
     <div style={{ minHeight:'100vh', background:C.bg, fontFamily:"'Inter',system-ui,sans-serif", transition:'background 0.3s' }}>
       <style>{`*{box-sizing:border-box;}body{margin:0;}input,select,button,textarea{font-family:'Inter',system-ui,sans-serif;}`}</style>
