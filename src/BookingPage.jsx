@@ -581,14 +581,14 @@ export default function BookingPage() {
                   <Inp C={C} value={newForm.area} onChange={e=>nf({area:e.target.value})} placeholder="JVC"/>
                 </Field>
                 <Field C={C} label="Building / Street" hint="e.g. Hanover Square, Street 2, Villa Road">
-                  <Inp C={C} value={newForm.building} onChange={e=>nf({building:e.target.value})} placeholder="Hanover Square"/>
+                  <Inp C={C} value={newForm.building} onChange={e=>nf({building:e.target.value})} placeholder="e.g. Hanover Square, Al Wasl Road"/>
                 </Field>
                 <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
                   <Field C={C} label="Apt / Villa No.">
-                    <Inp C={C} value={newForm.unitNo} onChange={e=>nf({unitNo:e.target.value})} placeholder="G08"/>
+                    <Inp C={C} value={newForm.unitNo} onChange={e=>nf({unitNo:e.target.value})} placeholder="e.g. G08, Villa 7"/>
                   </Field>
-                  <Field C={C} label="Block (optional)">
-                    <Inp C={C} value={newForm.block} onChange={e=>nf({block:e.target.value})} placeholder="Block C"/>
+                  <Field C={C} label="Tower / Gate / Block (optional)">
+                    <Inp C={C} value={newForm.block} onChange={e=>nf({block:e.target.value})} placeholder="e.g. Block C, Tower 2, Gate 4"/>
                   </Field>
                 </div>
                 <Check C={C} checked={newForm.sameWhatsapp} onChange={()=>nf({sameWhatsapp:!newForm.sameWhatsapp})} label="WhatsApp same as phone number"/>
