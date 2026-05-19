@@ -413,6 +413,10 @@ export default function BookingPage() {
 
           </div>
         </div>
+      )}
+
+      {/* Floating Book Now — always visible on landing */}
+      {screen==='landing' && (
         <div style={{ position:'fixed', bottom:0, left:0, right:0, padding:'16px 20px 32px', background:'linear-gradient(to top, '+C.bg+' 70%, transparent)', zIndex:100 }}>
           <GradBtn C={C} onClick={()=>setScreen('lookup')}>Book Now</GradBtn>
         </div>
