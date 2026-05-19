@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { supabase } from './supabase'
 
 // ─── THEMES ───────────────────────────────────────────────────────────────────
@@ -59,6 +59,25 @@ const SERVICES = [
   { id:'group',      label:'Group Haircuts', price:150, duration:'Varies', desc:'AED 150 each · 2 or more people' },
 ]
 
+
+const COUNTRY_CODES = [
+  { code:'+971', flag:'🇦🇪', name:'UAE' },
+  { code:'+44',  flag:'🇬🇧', name:'UK' },
+  { code:'+1',   flag:'🇺🇸', name:'US/CA' },
+  { code:'+61',  flag:'🇦🇺', name:'Australia' },
+  { code:'+64',  flag:'🇳🇿', name:'New Zealand' },
+  { code:'+91',  flag:'🇮🇳', name:'India' },
+  { code:'+92',  flag:'🇵🇰', name:'Pakistan' },
+  { code:'+20',  flag:'🇪🇬', name:'Egypt' },
+  { code:'+966', flag:'🇸🇦', name:'Saudi Arabia' },
+  { code:'+974', flag:'🇶🇦', name:'Qatar' },
+  { code:'+965', flag:'🇰🇼', name:'Kuwait' },
+  { code:'+973', flag:'🇧🇭', name:'Bahrain' },
+  { code:'+968', flag:'🇴🇲', name:'Oman' },
+  { code:'+33',  flag:'🇫🇷', name:'France' },
+  { code:'+49',  flag:'🇩🇪', name:'Germany' },
+  { code:'+34',  flag:'🇪🇸', name:'Spain' },
+]
 const REVIEWS = [
   { name:'Howie Baker',  rating:5, text:'What a top guy, great chat, with the flyest cuts. Nothing more to ask for. 🔥', time:'Last month' },
   { name:'James M',      rating:5, text:'Such great service and such a great guy. More than happy to recommend. My son is the happiest he has ever been with a haircut.', time:'2 months ago' },
@@ -240,6 +259,10 @@ export default function BookingPage() {
   const [manageError, setManageError] = useState('')
   const [cancelDone, setCancelDone] = useState(false)
   const [lookupValue, setLookupValue] = useState('')
+  const [lookupMode, setLookupMode] = useState('phone')
+  const [countryCode, setCountryCode] = useState('+971')
+  const [phoneNum, setPhoneNum] = useState('')
+  const [showCodes, setShowCodes] = useState(false)
 
   const blankNew = () => ({ name:'', address:'', phone:'', sameWhatsapp:true, whatsapp:'', email:'', service:'', date:'', time:'', notes:'', mediaConsent:false, groupMembers:[] })
   const blankRet = () => ({ service:'', date:'', time:'', notes:'', groupMembers:[] })
@@ -447,16 +470,53 @@ export default function BookingPage() {
           {/* LOOKUP */}
           {screen==='lookup' && (
             <Card C={C}>
-              <div style={{ textAlign:'center', marginBottom:24 }}>
-                <h2 style={{ fontSize:20, fontWeight:800, marginBottom:8, color:C.text }}>Let's get you booked</h2>
-                <p style={{ color:C.muted, fontSize:14, lineHeight:1.6 }}>Enter your phone number to get started. If you've booked before, we'll pull up your details automatically.</p>
-              </div>
-              <Field C={C} label="Phone Number or Email">
-                <Inp C={C} value={lookupValue} onChange={e=>setLookupValue(e.target.value)} onKeyDown={e=>e.key==='Enter'&&handleLookup()} placeholder="+971 50 000 0000 or email@example.com"/>
-              </Field>
-              <GradBtn C={C} onClick={handleLookup} disabled={!lookupValue.trim()||looking}>
-                {looking?'Checking...':'Continue →'}
-              </GradBtn>
+                  <div style={{ textAlign:'center', marginBottom:24 }}>
+                    <h2 style={{ fontSize:20, fontWeight:800, marginBottom:8, color:C.text }}>Let's get you booked</h2>
+                    <p style={{ color:C.muted, fontSize:14, lineHeight:1.6 }}>Booked before? We'll pull up your details automatically.</p>
+                  </div>
+
+                  {/* Toggle */}
+                  <div style={{ display:'flex', background:C.bg2, borderRadius:12, padding:4, marginBottom:20, border:`1px solid ${C.border}` }}>
+                    {['phone','email'].map(m=>(
+                      <button key={m} onClick={()=>{ setLookupMode(m); setLookupValue(''); setPhoneNum('') }}
+                        style={{ flex:1, padding:'10px', borderRadius:8, border:'none', background:lookupMode===m?C.accent:'transparent', color:lookupMode===m?'#fff':C.muted, fontWeight:700, fontSize:13, cursor:'pointer', transition:'all 0.15s' }}>
+                        {m==='phone'?'📱 Phone':'✉️ Email'}
+                      </button>
+                    ))}
+                  </div>
+
+                  {lookupMode==='phone' ? (
+                    <div style={{ display:'flex', gap:8, marginBottom:20, position:'relative' }}>
+                      {/* Country code picker */}
+                      <button onClick={()=>setShowCodes(!showCodes)}
+                        style={{ background:C.bg2, border:`1.5px solid ${C.border}`, borderRadius:12, padding:'14px 12px', fontSize:14, fontWeight:700, color:C.text, cursor:'pointer', whiteSpace:'nowrap', display:'flex', alignItems:'center', gap:4 }}>
+                        {COUNTRY_CODES.find(c=>c.code===countryCode)?.flag} {countryCode} ▾
+                      </button>
+                      {showCodes && (
+                        <div style={{ position:'absolute', top:'100%', left:0, background:C.bg, border:`1px solid ${C.border}`, borderRadius:12, zIndex:50, marginTop:4, boxShadow:'0 8px 24px rgba(0,0,0,0.15)', maxHeight:220, overflow:'auto', minWidth:180 }}>
+                          {COUNTRY_CODES.map(c=>(
+                            <button key={c.code} onClick={()=>{ setCountryCode(c.code); setShowCodes(false) }}
+                              style={{ display:'flex', alignItems:'center', gap:10, width:'100%', padding:'11px 14px', background:'none', border:'none', cursor:'pointer', fontSize:13, color:C.text, textAlign:'left' }}
+                              onMouseEnter={e=>e.currentTarget.style.background=C.bg2}
+                              onMouseLeave={e=>e.currentTarget.style.background='none'}>
+                              <span>{c.flag}</span>
+                              <span style={{ fontWeight:600 }}>{c.code}</span>
+                              <span style={{ color:C.muted }}>{c.name}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                      <Inp C={C} value={phoneNum} onChange={e=>{ setPhoneNum(e.target.value); setLookupValue(countryCode+e.target.value) }} onKeyDown={e=>e.key==='Enter'&&handleLookup()} placeholder="56 878 8736" type="tel" style={{ flex:1 }}/>
+                    </div>
+                  ) : (
+                    <div style={{ marginBottom:20 }}>
+                      <Inp C={C} value={lookupValue} onChange={e=>setLookupValue(e.target.value)} onKeyDown={e=>e.key==='Enter'&&handleLookup()} placeholder="you@example.com" type="email"/>
+                    </div>
+                  )}
+
+                  <GradBtn C={C} onClick={()=>{ setLookupValue(fullValue); handleLookup() }} disabled={lookupMode==='phone'?!phoneNum.trim():!lookupValue.trim()||looking}>
+                    {looking?'Checking...':'Continue →'}
+                  </GradBtn>
             </Card>
           )}
 
