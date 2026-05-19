@@ -571,8 +571,8 @@ export default function BookingPage() {
               <Card C={C}>
                 <SectionLabel C={C}>Your Details</SectionLabel>
                 <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginBottom:20 }}>
-                  <Field C={C} label="First Name"><Inp C={C} value={newForm.firstName} onChange={e=>nf({firstName:e.target.value})} placeholder="Ahmed"/></Field>
-                  <Field C={C} label="Last Name"><Inp C={C} value={newForm.lastName} onChange={e=>nf({lastName:e.target.value})} placeholder="Al Mansoori"/></Field>
+                  <Field C={C} label="First Name"><Inp C={C} value={newForm.firstName} onChange={e=>nf({firstName:e.target.value})} placeholder="First name"/></Field>
+                  <Field C={C} label="Last Name"><Inp C={C} value={newForm.lastName} onChange={e=>nf({lastName:e.target.value})} placeholder="Last name"/></Field>
                 </div>
                 <Field C={C} label="Phone Number" hint="Used to find your profile next time">
                   <Inp C={C} value={newForm.phone} onChange={e=>nf({phone:e.target.value})} placeholder="+971 50 000 0000" type="tel"/>
