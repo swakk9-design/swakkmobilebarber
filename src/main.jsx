@@ -70,12 +70,36 @@ function PinLock({ onUnlock }) {
   )
 }
 
+
+class ErrorBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { error: null } }
+  static getDerivedStateFromError(error) { return { error } }
+  render() {
+    if (this.state.error) {
+      return <div style={{ padding:40, fontFamily:'sans-serif', textAlign:'center' }}>
+        <h2>Something went wrong</h2>
+        <pre style={{ fontSize:12, textAlign:'left', background:'#f5f5f5', padding:16, borderRadius:8, overflow:'auto' }}>{this.state.error?.toString()}</pre>
+        <p style={{ fontSize:12, color:'#666' }}>{this.state.error?.stack?.split('\n').slice(0,5).join('\n')}</p>
+      </div>
+    }
+    return this.props.children
+  }
+}
+
 function Root() {
   const path = window.location.pathname
   const isBookingPage = path === '/book' || path === '/book/'
   const [unlocked, setUnlocked] = useState(!!sessionStorage.getItem(SESSION_KEY))
 
-  if (isBookingPage) return <BookingPage/>
+  if (isBookingPage) {
+    return (
+      <React.Suspense fallback={<div style={{padding:40,textAlign:'center',fontFamily:'sans-serif'}}>Loading...</div>}>
+        <ErrorBoundary>
+          <BookingPage/>
+        </ErrorBoundary>
+      </React.Suspense>
+    )
+  }
   if (!unlocked) return <PinLock onUnlock={() => setUnlocked(true)}/>
   return <App/>
 }
