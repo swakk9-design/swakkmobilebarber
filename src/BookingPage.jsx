@@ -229,6 +229,7 @@ export default function BookingPage() {
   const applyTheme = (name) => { setThemeName(name); localStorage.setItem(THEME_KEY, name) }
 
   const [screen, setScreen] = useState('landing')
+  const [showFirstTime, setShowFirstTime] = useState(true)
   const [bookedSlots, setBookedSlots] = useState([])
   const [submitting, setSubmitting] = useState(false)
   const [looking, setLooking] = useState(false)
@@ -488,13 +489,25 @@ export default function BookingPage() {
           {/* NEW CLIENT */}
           {screen==='new_client' && (
             <>
-              <div style={{ background:C.accentLight, borderRadius:14, padding:16, marginBottom:16, border:`1px solid ${C.border}`, display:'flex', gap:12, alignItems:'center' }}>
-                <div style={{ fontSize:24 }}>✨</div>
-                <div>
-                  <div style={{ fontWeight:700, fontSize:14, color:C.text }}>First time? Welcome!</div>
-                  <div style={{ fontSize:12, color:C.muted, marginTop:2 }}>Fill this in once — next time it's just 3 taps.</div>
+              {showFirstTime && (
+                <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', zIndex:200, display:'flex', alignItems:'flex-end', justifyContent:'center' }}>
+                  <div style={{ background:C.bg, borderRadius:'24px 24px 0 0', padding:'32px 24px 48px', width:'100%', maxWidth:520, textAlign:'center' }}>
+                    <div style={{ fontSize:52, marginBottom:16 }}>✂️</div>
+                    <h2 style={{ fontSize:22, fontWeight:800, color:C.text, margin:'0 0 12px' }}>One time. That's it.</h2>
+                    <p style={{ fontSize:15, color:C.muted, lineHeight:1.7, margin:'0 0 10px' }}>
+                      We need your details just <strong style={{ color:C.text }}>once</strong> to set up your profile.
+                    </p>
+                    <p style={{ fontSize:15, color:C.muted, lineHeight:1.7, margin:'0 0 28px' }}>
+                      Every booking after this? Just enter your number and you're done in <strong style={{ color:C.text }}>3 taps</strong>. No forms, no hassle.
+                    </p>
+                    <div style={{ background:C.accentLight, borderRadius:12, padding:'14px 16px', marginBottom:28, border:`1px solid ${C.border}` }}>
+                      <div style={{ fontSize:13, color:C.text, fontWeight:600 }}>📱 Name · Phone · Address</div>
+                      <div style={{ fontSize:12, color:C.muted, marginTop:4 }}>Saved forever. Never asked again.</div>
+                    </div>
+                    <GradBtn C={C} onClick={()=>setShowFirstTime(false)}>Got it — let's go</GradBtn>
+                  </div>
                 </div>
-              </div>
+              )}
               <Card C={C}>
                 <SectionLabel C={C}>Your Details</SectionLabel>
                 <Field C={C} label="Full Name"><Inp C={C} value={newForm.name} onChange={e=>nf({name:e.target.value})} placeholder="e.g. Ahmed Al Mansoori"/></Field>
