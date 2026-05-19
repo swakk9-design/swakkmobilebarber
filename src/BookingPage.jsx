@@ -319,7 +319,7 @@ export default function BookingPage() {
     const phone = f.phone
     const ex = await supabase.from('clients').select('id').ilike('phone',`%${phone.replace(/\s/g,'')}%`).limit(1)
     if(!ex.data?.length) await supabase.from('clients').insert({name:f.name,phone:f.phone,email:f.email||null,preferred_service:svc?.label,notes:f.mediaConsent?'Media consent: yes':'Media consent: no',since:new Date().toISOString().slice(0,10)})
-    const {error}=await supabase.from('bookings').insert({client_name:f.name,service:svc?.label,date:f.date,time:f.time,notes:buildNotes(f.notes,f.groupMembers),status:'confirmed',booking_ref:ref,location:f.address,price:String(svc?.price||'')})
+    const {error}=await supabase.from('bookings').insert({client_name:fullName,service:svc?.label,date:f.date,time:f.time,notes:buildNotes(f.notes,f.groupMembers),status:'confirmed',booking_ref:ref,location:fullAddress,price:String(svc?.price||'')})
     if(!error){
       setConfirmed({name:fullName,service:svc?.label,price:svc?.price,date:f.date,time:f.time,bookingRef:ref,isNew:true})
       setScreen('confirm')
