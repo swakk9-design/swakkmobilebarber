@@ -306,7 +306,7 @@ export default function BookingPage() {
   const buildNotes = (notes, members) => {
     const parts = []
     if(notes) parts.push(notes)
-    if(members?.length) parts.push('Group: '+members.filter(m=>m?.name).map(m=>m.name).join(', '))
+    if(members?.length) parts.push('Group: '+members.filter(m=>m?.name).map(m=>m.name||'').join(', '))
     return parts.join(' | ')
   }
 
@@ -531,7 +531,7 @@ export default function BookingPage() {
                   {existingClient.name?.charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <div style={{ fontWeight:800, fontSize:16, color:C.text }}>Welcome back, {existingClient.name.split(' ')[0]}! 👊</div>
+                  <div style={{ fontWeight:800, fontSize:16, color:C.text }}>Welcome back, {(existingClient.name||existingClient.firstName||'').split(' ')[0]}! 👊</div>
                   <div style={{ fontSize:13, color:C.muted, marginTop:2 }}>Just pick your service, date and time.</div>
                 </div>
               </div>
