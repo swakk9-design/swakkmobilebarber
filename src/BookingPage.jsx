@@ -56,7 +56,7 @@ const TIME_SLOTS = [
 const SERVICES = [
   { id:'haircut',    label:'Haircut',      price:180, duration:'1 hr',  desc:'Clean cut tailored to your style' },
   { id:'hair_beard', label:'Hair & Beard', price:200, duration:'1 hr',  desc:'Full cut with beard trim and shape' },
-  { id:'group',      label:'Group',        price:150, duration:'Varies', desc:'AED 150 per person · 2 or more people' },
+  { id:'group',      label:'Group Haircuts', price:150, duration:'Varies', desc:'AED 150 each · 2 or more people' },
 ]
 
 const REVIEWS = [
@@ -381,7 +381,7 @@ export default function BookingPage() {
                       <div style={{ fontWeight:700, fontSize:14, color:C.text }}>{s.label}</div>
                       <div style={{ fontSize:12, color:C.muted, marginTop:1 }}>{s.duration}</div>
                     </div>
-                    <div style={{ fontWeight:800, fontSize:15, color:C.accent }}>AED {s.price}</div>
+                    <div style={{ fontWeight:800, fontSize:15, color:C.accent }}>{s.id==='group' ? 'AED 150 each' : `AED ${s.price}`}</div>
                   </div>
                 ))}
               </div>
@@ -411,8 +411,10 @@ export default function BookingPage() {
               </div>
             </div>
 
-            <GradBtn C={C} onClick={()=>setScreen('lookup')}>Book Now</GradBtn>
           </div>
+        </div>
+        <div style={{ position:'fixed', bottom:0, left:0, right:0, padding:'16px 20px 32px', background:`linear-gradient(to top, ${C.bg} 70%, transparent)`, zIndex:100 }}>
+          <GradBtn C={C} onClick={()=>setScreen('lookup')}>Book Now</GradBtn>
         </div>
       )}
 
