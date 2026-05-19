@@ -553,7 +553,7 @@ export default function BookingPage() {
                 <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', zIndex:200, display:'flex', alignItems:'flex-end', justifyContent:'center' }}>
                   <div style={{ background:C.bg, borderRadius:'24px 24px 0 0', padding:'32px 24px 48px', width:'100%', maxWidth:520, textAlign:'center' }}>
                     <div style={{ fontSize:52, marginBottom:16 }}>✂️</div>
-                    <h2 style={{ fontSize:22, fontWeight:800, color:C.text, margin:'0 0 12px' }}>One time. That's it.</h2>
+                    <h2 style={{ fontSize:22, fontWeight:800, color:C.text, margin:'0 0 12px' }}>Set up your profile once — we'll remember everything.</h2>
                     <p style={{ fontSize:15, color:C.muted, lineHeight:1.7, margin:'0 0 10px' }}>
                       We need your details just <strong style={{ color:C.text }}>once</strong> to set up your profile.
                     </p>
