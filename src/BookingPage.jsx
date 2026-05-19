@@ -346,8 +346,8 @@ export default function BookingPage() {
   }
 
   return (
-    <div style={{ minHeight:'100vh', background:C.bg, fontFamily:"'Bebas Neue',system-ui,sans-serif", transition:'background 0.3s' }}>
-      <style>{`*{box-sizing:border-box;}body{margin:0;}input,select,button,textarea{font-family:'Bebas Neue',system-ui,sans-serif;}`}</style>
+    <div style={{ minHeight:'100vh', background:C.bg, fontFamily:"'Inter',system-ui,sans-serif", transition:'background 0.3s' }}>
+      <style>{`*{box-sizing:border-box;}body{margin:0;}input,select,button,textarea{font-family:'Inter',system-ui,sans-serif;}`}</style>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet"/>
 
       {themeOpen && <ThemePicker C={C} current={themeName} onSelect={applyTheme} onClose={()=>setThemeOpen(false)}/>}
