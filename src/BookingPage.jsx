@@ -618,14 +618,14 @@ export default function BookingPage() {
             <div style={{ textAlign:'center' }}>
               <div style={{ fontSize:56, marginBottom:16 }}>🎉</div>
               <h2 style={{ fontSize:24, fontWeight:900, color:C.text, marginBottom:6 }}>You're booked!</h2>
-              <p style={{ color:C.muted, fontSize:14, marginBottom:6 }}>See you on {confirmed.date} at {confirmed.time}.</p>
+              <p style={{ color:C.muted, fontSize:14, marginBottom:6 }}>See you on {new Date(confirmed.date+'T00:00:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})} at {confirmed.time}.</p>
               {confirmed.isNew && <p style={{ color:C.muted, fontSize:13, marginBottom:24 }}>Profile saved — next time just enter your number 🎉</p>}
               {!confirmed.isNew && <p style={{ color:C.muted, fontSize:13, marginBottom:24 }}>See you soon! 👊</p>}
               <Card C={C} style={{ textAlign:'left', marginBottom:24 }}>
                 <Row C={C} label="Name" value={confirmed.name}/>
                 <Row C={C} label="Service" value={confirmed.service}/>
                 <Row C={C} label="Price" value={`AED ${confirmed.price}`}/>
-                <Row C={C} label="Date" value={confirmed.date}/>
+                <Row C={C} label="Date" value={new Date(confirmed.date+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}/>
                 <Row C={C} label="Time" value={confirmed.time}/>
               </Card>
               <div style={{ fontSize:13, color:C.muted, marginBottom:8 }}>Your booking reference</div>
