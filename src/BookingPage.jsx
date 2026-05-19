@@ -348,7 +348,7 @@ export default function BookingPage() {
   return (
     <div style={{ minHeight:'100vh', background:C.bg, fontFamily:"'Bebas Neue',system-ui,sans-serif", transition:'background 0.3s' }}>
       <style>{`*{box-sizing:border-box;}body{margin:0;}input,select,button,textarea{font-family:'Bebas Neue',system-ui,sans-serif;}`}</style>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet"/>
 
       {themeOpen && <ThemePicker C={C} current={themeName} onSelect={applyTheme} onClose={()=>setThemeOpen(false)}/>}
 
@@ -362,7 +362,7 @@ export default function BookingPage() {
               {C.emoji} Theme
             </button>
             <div style={{ fontSize:48, marginBottom:12 }}>✂️</div>
-            <h1 style={{ margin:'0 0 8px', fontSize:28, fontWeight:900, color:'#fff', letterSpacing:'-0.5px' }}>Swakk Mobile Barbering</h1>
+            <h1 style={{ margin:'0 0 8px', fontSize:32, fontWeight:900, color:'#fff', fontFamily:"'Bebas Neue',sans-serif", letterSpacing:'0.02em' }}>Swakk Mobile Barbering</h1>
             <p style={{ margin:0, color:'rgba(255,255,255,0.85)', fontSize:15 }}>Premium cuts at your location · Dubai</p>
             <div style={{ display:'flex', justifyContent:'center', gap:6, marginTop:16 }}>
               <Stars n={5}/>
