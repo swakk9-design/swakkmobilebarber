@@ -264,7 +264,7 @@ export default function BookingPage() {
   const [phoneNum, setPhoneNum] = useState('')
   const [showCodes, setShowCodes] = useState(false)
 
-  const blankNew = (phone='') => ({ firstName:'', lastName:'', address:'', phone:phone, sameWhatsapp:true, whatsapp:'', email:'', service:'', date:'', time:'', notes:'', mediaConsent:false, groupMembers:[] })
+  const blankNew = (phone='') => ({ firstName:'', lastName:'', area:'', building:'', unitNo:'', block:'', phone:phone, sameWhatsapp:true, whatsapp:'', email:'', service:'', date:'', time:'', notes:'', mediaConsent:false, groupMembers:[] })
   const blankRet = () => ({ service:'', date:'', time:'', notes:'', groupMembers:[] })
   const [newForm, setNewForm] = useState(blankNew())
   const [retForm, setRetForm] = useState(blankRet())
@@ -312,7 +312,7 @@ export default function BookingPage() {
 
   const submitNew = async () => {
     const f = newForm
-    if(!f.firstName||!f.lastName||!f.service||!f.date||!f.time||!f.email) return
+    if(!f.firstName||!f.lastName||!f.area||!f.building||!f.unitNo||!f.service||!f.date||!f.time||!f.email) return
     setSubmitting(true)
     const ref = Math.random().toString(36).substring(2,8).toUpperCase()
     const svc = SERVICES.find(s=>s.id===f.service)
@@ -327,7 +327,7 @@ export default function BookingPage() {
         await fetch('https://nnidxufnykutfpszfjja.supabase.co/functions/v1/notify-booking', {
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({ type:'new_booking', booking:{ clientName:fullName, service:svc?.label, date:f.date, time:f.time, price:svc?.price, location:f.address, bookingRef:ref, clientPhone:f.phone } })
+          body:JSON.stringify({ type:'new_booking', booking:{ clientName:fullName, service:svc?.label, date:f.date, time:f.time, price:svc?.price, location:fullAddress, bookingRef:ref, clientPhone:f.phone } })
         })
       } catch(e) { console.log('notify failed', e) }
     }
@@ -577,9 +577,20 @@ export default function BookingPage() {
                 <Field C={C} label="Phone Number" hint="Used to find your profile next time">
                   <Inp C={C} value={newForm.phone} onChange={e=>nf({phone:e.target.value})} placeholder="+971 50 000 0000" type="tel"/>
                 </Field>
-                <Field C={C} label="Home / Location Address" hint="Where should we come to?">
-                  <Inp C={C} value={newForm.address} onChange={e=>nf({address:e.target.value})} placeholder="Villa 12, Street 4, Jumeirah..."/>
+                <Field C={C} label="Area" hint="e.g. JVC, Arabian Ranches, Jumeirah">
+                  <Inp C={C} value={newForm.area} onChange={e=>nf({area:e.target.value})} placeholder="JVC"/>
                 </Field>
+                <Field C={C} label="Building / Street" hint="e.g. Hanover Square, Street 2, Villa Road">
+                  <Inp C={C} value={newForm.building} onChange={e=>nf({building:e.target.value})} placeholder="Hanover Square"/>
+                </Field>
+                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
+                  <Field C={C} label="Apt / Villa No.">
+                    <Inp C={C} value={newForm.unitNo} onChange={e=>nf({unitNo:e.target.value})} placeholder="G08"/>
+                  </Field>
+                  <Field C={C} label="Block (optional)">
+                    <Inp C={C} value={newForm.block} onChange={e=>nf({block:e.target.value})} placeholder="Block C"/>
+                  </Field>
+                </div>
                 <Check C={C} checked={newForm.sameWhatsapp} onChange={()=>nf({sameWhatsapp:!newForm.sameWhatsapp})} label="WhatsApp same as phone number"/>
                 {!newForm.sameWhatsapp && <Field C={C} label="WhatsApp Number"><Inp C={C} value={newForm.whatsapp} onChange={e=>nf({whatsapp:e.target.value})} placeholder="+971 50 000 0000" type="tel"/></Field>}
                 <Field C={C} label="Email"><Inp C={C} value={newForm.email} onChange={e=>nf({email:e.target.value})} placeholder="you@email.com" type="email"/></Field>
@@ -592,7 +603,7 @@ export default function BookingPage() {
                     style={{ width:'100%', background:C.bg2, border:`1.5px solid ${C.border}`, borderRadius:12, padding:'14px 16px', fontSize:15, color:C.text, outline:'none', boxSizing:'border-box', resize:'vertical', minHeight:70 }}/>
                 </Field>
               </Card>
-              <GradBtn C={C} onClick={submitNew} disabled={submitting||!newForm.firstName||!newForm.lastName||!newForm.phone||!newForm.address||!newForm.email||!newForm.service||!newForm.date||!newForm.time}>
+              <GradBtn C={C} onClick={submitNew} disabled={submitting||!newForm.firstName||!newForm.lastName||!newForm.phone||!newForm.area||!newForm.building||!newForm.unitNo||!newForm.email||!newForm.service||!newForm.date||!newForm.time}>
                 {submitting?'Booking...':'Confirm Booking →'}
               </GradBtn>
               <div style={{ marginTop:10 }}><OutlineBtn C={C} onClick={reset}>← Back</OutlineBtn></div>
